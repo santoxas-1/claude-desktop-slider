@@ -1,10 +1,11 @@
 @echo off
 chcp 65001 >nul
-title Установка мода Cosmic Slider для Claude Desktop
+title Установка: Выбор уровня рассуждений в Claude Desktop
 color 0B
 
 echo ===================================================================
-echo     Cosmic Slider Mod for Claude Desktop (Warp Speed Edition)
+echo     Установка выбора уровня рассуждений (Reasoning Effort)
+echo                          для Claude Desktop
 echo ===================================================================
 echo.
 
@@ -22,7 +23,6 @@ if exist "%LOCALAPPDATA%\Programs\Claude\resources\ion-dist" (
 ) else if exist "%PROGRAMFILES%\Claude\resources\ion-dist" (
     set "ION_DIR=%PROGRAMFILES%\Claude\resources\ion-dist"
 ) else (
-    :: Поиск версионных папок Squirrel (app-*)
     for /f "delims=" %%I in ('powershell -NoProfile -Command "(Get-Item '%LOCALAPPDATA%\Claude\app-*\resources\ion-dist' -ErrorAction SilentlyContinue | Select-Object -Last 1).FullName"') do set "ION_DIR=%%I"
 )
 
@@ -59,11 +59,11 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
-echo       Файл cosmic-slider.js успешно скопирован.
+echo       Файл успешно скопирован.
 
 :: 4. Подключение скрипта в index.html
 echo.
-echo [4/4] Активация скрипта в index.html...
+echo [4/4] Активация мода в index.html...
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "$html = '%ION_DIR%\index.html';" ^
     "$c = [System.IO.File]::ReadAllText($html, [System.Text.Encoding]::UTF8);" ^
@@ -74,9 +74,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
     "        $c = $c -replace '<head>', '<head><script src=\"/cosmic-slider.js\"></script>';" ^
     "    }" ^
     "    [System.IO.File]::WriteAllText($html, $c, [System.Text.Encoding]::UTF8);" ^
-    "    Write-Host '      [OK] Тег скрипта успешно добавлен в index.html' -ForegroundColor Green;" ^
+    "    Write-Host '      [OK] Мод успешно подключен в index.html' -ForegroundColor Green;" ^
     "} else {" ^
-    "    Write-Host '      [i] Скрипт уже был подключен ранее' -ForegroundColor Yellow;" ^
+    "    Write-Host '      [i] Мод уже был подключен ранее' -ForegroundColor Yellow;" ^
     "}"
 
 color 0A
@@ -86,9 +86,8 @@ echo     Установка успешно завершена!
 echo ===================================================================
 echo.
 echo 1. Перезапустите Claude Desktop (или нажмите Ctrl+R в его окне).
-echo 2. В строке выбора модели нажмите на кнопку усилий рассуждений.
-echo 3. Переключитесь на «Максимум» — и звёзды устремятся в гиперпрыжок!
+echo 2. Внизу появится кнопка выбора уровня рассуждений.
 echo.
-echo Для удаления мода запустите uninstall.bat.
+echo Для удаления запустите uninstall.bat.
 echo.
 pause
